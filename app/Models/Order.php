@@ -14,8 +14,13 @@ class Order extends Model {
         return $this->hasMany('App\Models\Ticket');
     }
 
-    public function concert() {
-        return $this->belongsTo('App\Models\Concert');
+    /*public function concert() {
+        return $this->HasOneThrough('App\Models\Concert');
+    }*/
+
+    public function concert(): HasOneThrough
+    {
+        return $this->hasOneThrough(Concert::class, Ticket::class, 'concert_id', 'id');
     }
 
     public function cancel() {

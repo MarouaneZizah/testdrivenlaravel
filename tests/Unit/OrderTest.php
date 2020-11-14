@@ -11,6 +11,11 @@ class OrderTest extends TestCase {
     use DatabaseMigrations;
 
     /** @test */
+    /*public function creating_order_from_ticket_and_email() {
+
+    }*/
+
+    /** @test */
     public function tickets_are_released_when_an_order_is_cancelled() {
         $concert = Concert::factory()->create()->addTickets(10);
         $order   = $concert->orderTickets('jane@example.com', 5);
