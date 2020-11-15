@@ -14,9 +14,18 @@ class Order extends Model {
         return $this->hasMany('App\Models\Ticket');
     }
 
-    /*public function concert() {
-        return $this->HasOneThrough('App\Models\Concert');
-    }*/
+    public static function forTickets($email, $tickets) {
+        $order = self::create([
+            'email'  => $email,
+            'amount' => $tickets->sum('price'),
+        ]);
+
+        foreach ($tickets as $ticket) {
+            $order->tickets()->save($ticket);
+        }
+
+        return $order;
+    }
 
     public function concert(): HasOneThrough
     {
