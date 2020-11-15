@@ -11,13 +11,13 @@ class OrderTest extends TestCase {
     use DatabaseMigrations;
 
     /** @test */
-    public function creating_order_from_ticket_and_email() {
-        $concert = Concert::factory()->create(['price' => 1200])->addTickets(10);
+    public function creating_order_from_ticket_and_email_and_price() {
+        $concert = Concert::factory()->create()->addTickets(10);
 
         $this->assertEquals(10, $concert->ticketsRemaining());
 
         $tickets = $concert->findTickets(3);
-        $order   = Order::forTickets('john@example.com', $tickets);
+        $order   = Order::forTickets('john@example.com', $tickets, 3600);
 
         $this->assertEquals('john@example.com', $order->email);
         $this->assertEquals(3, $order->ticketQuantity());

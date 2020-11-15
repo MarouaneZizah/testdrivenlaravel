@@ -14,10 +14,10 @@ class Order extends Model {
         return $this->hasMany('App\Models\Ticket');
     }
 
-    public static function forTickets($email, $tickets) {
+    public static function forTickets($email, $tickets, $amount) {
         $order = self::create([
             'email'  => $email,
-            'amount' => $tickets->sum('price'),
+            'amount' => $amount,
         ]);
 
         foreach ($tickets as $ticket) {

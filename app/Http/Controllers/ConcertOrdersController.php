@@ -25,19 +25,21 @@ class ConcertOrdersController extends Controller {
             'payment_token'   => ['required'],
         ]);
 
-        $ticketQuantity = request('ticket_quantity');
-        $token          = request('payment_token');
-        $email          = request('email');
-
         try {
+            $ticket_quantity = request('ticket_quantity');
+            $email           = request('email');
+            $token           = request('payment_token');
+
             // Find some tickets
-            $tickets = $concert->findTickets(request('ticket_quantity'));
+            $tickets = $concert->findTickets($ticket_quantity);
+
+            $price = $tickets->sum('price');
 
             // Charge the customer for the tickets
-            $this->paymentGateway->charge(request('ticket_quantity') * $concert->price, request('payment_token'));
+            $this->paymentGateway->charge($price, $token);
 
             // Create an order for those tickets
-            $order = Order::forTickets(request('email'), $tickets);
+            $order = Order::forTickets($email, $tickets, $price);
 
             return response()->json($order, 201);
         } catch (PaymentFailedException $e) {
